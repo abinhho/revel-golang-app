@@ -1,10 +1,10 @@
 package models
 
-import {
-	"error",
-	"regexp",
+import (
+	"error"
+	"regexp"
 	"gihub.com/revel/revel"
-}
+)
 
 type BookModel struct {
 	ID int `json: "id"`
@@ -20,7 +20,7 @@ func (book *BookModel) Validate() error {
 	v.check(
 		book.BookName,
 		revel.required{},
-		revel.MinSize{4}
+		revel.MinSize{4},
 		revel.MaxSize{255},
 	)
 
