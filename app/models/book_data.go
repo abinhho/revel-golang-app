@@ -1,12 +1,11 @@
 package models
 
 import (
-	"error"
-	"regexp"
-	"gihub.com/revel/revel"
+	"errors"
+	"github.com/revel/revel"
 )
 
-type BookModel struct {
+type BookData struct {
 	ID int `json: "id"`
 	BookName string `json:bookname`
 	BookCatId int `json:bookcatid`
@@ -14,17 +13,17 @@ type BookModel struct {
 	Updated int64 `json:-`
 }
 
-func (book *BookModel) Validate() error {
+func (book *BookData) Validate() error {
 	var v revel.Validation
 
-	v.check(
+	v.Check(
 		book.BookName,
-		revel.required{},
+		revel.Required{},
 		revel.MinSize{4},
 		revel.MaxSize{255},
 	)
 
-	if v.HasError() {
+	if v.HasErrors() {
 		return errors.New("Book name is not valid")
 	}
 

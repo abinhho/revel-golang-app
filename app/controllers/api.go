@@ -28,8 +28,8 @@ const (
 func (c *ApiController) Response(s interface{}) revel.Result {
 
 	if c.callBack != "" {
-		return c.RenderJsonP(c.callBack, s)
+		return c.RenderJSONP(c.callBack, s)
 	} else {
-		return c.RenderJson(s)
+		return c.RenderJSON(s)
 	}
 }

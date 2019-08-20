@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-
 	"github.com/go-gorp/gorp"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/revel/modules/db/app"
@@ -17,8 +16,8 @@ var (
 func InitDB() {
 	db.Init()
 	Dbm = &gorp.DbMap{Db: db.Db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
-	Dbm.TraceOn("[gorp]", r.INFO)
-	Dbm.AddTableWithName(BookModel{}, "book").SetKeys(true, "ID")
+	// Dbm.TraceOn("[gorp]", r.AppLog.Info("[gorp]"))
+	Dbm.AddTableWithName(BookData{}, "book").SetKeys(true, "ID")
 }
 
 type GorpController struct {
