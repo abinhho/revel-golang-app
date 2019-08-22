@@ -17,7 +17,7 @@ func InitDB() {
 	db.Init()
 	Dbm = &gorp.DbMap{Db: db.Db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
 	// Dbm.TraceOn("[gorp]", r.AppLog.Info("[gorp]"))
-	Dbm.AddTableWithName(BookData{}, "book").SetKeys(true, "ID")
+	Dbm.AddTableWithName(Book{}, "book").SetKeys(true, "ID")
 }
 
 type GorpController struct {

@@ -5,7 +5,7 @@ import (
 	"github.com/revel/revel"
 )
 
-type BookData struct {
+type Book struct {
 	ID int `json: "id"`
 	BookName string `json:bookname`
 	BookCatId int `json:bookcatid`
@@ -13,7 +13,7 @@ type BookData struct {
 	Updated int64 `json:-`
 }
 
-func (book *BookData) Validate() error {
+func (book *Book) Validate() error {
 	var v revel.Validation
 
 	v.Check(

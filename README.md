@@ -5,11 +5,12 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 
 ### Start the web server:
 
-   revel run myapp
+    cd $GOPATH/src
+    git clone <this repo>
+    go get ./...
+    revel run revel-golang-app
 
-### Go to http://localhost:9000/ and you'll see:
-
-    "It works"
+### Go to http://localhost:9000
 
 ## Code Layout
 

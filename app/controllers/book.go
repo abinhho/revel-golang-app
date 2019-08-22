@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"github.com/revel/revel"
+	"fmt"
 )
 
 type ApiBook struct {
@@ -28,12 +29,13 @@ func BindJsonParams(i io.Reader, s interface{}) error {
 
 
 func (c *ApiBook) Create() revel.Result {
-	book := &models.BookData{}
+	book := &models.Book{}
+	fmt.Println(c)
 	// c.BindParams(book)
 
-	book.Validate(c.App.Validation)
-	if c.App.Validation.HasErrors() {
-		return c.App.RenderJson(&ErrorResponse{ERR_VALIDATE, ErrorMessage(ERR_VALIDATE)})
+	var hasError = book.Validate()
+	if hasError != nil {
+		return c.Response(&ErrorResponse{ERR_VALIDATE, c.ErrorMessage(ERR_VALIDATE)})
 	}
 
 	err := c.Txn.Insert(book)

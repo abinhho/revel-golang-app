@@ -25,6 +25,15 @@ const (
 	ERR_FATAL
 )
 
+func (c *ApiController) ErrorMessage(s int) string {
+
+	switch s {
+		case ERR_VALIDATE:
+			return "Error Validate"
+		default:
+			return ""
+	}
+}
 func (c *ApiController) Response(s interface{}) revel.Result {
 
 	if c.callBack != "" {
