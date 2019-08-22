@@ -12,6 +12,7 @@ import (
 
 type ApiBook struct {
 	ApiController
+	GorpController
 }
 
 func BindJsonParams(i io.Reader, s interface{}) error {
@@ -43,5 +44,14 @@ func (c *ApiBook) Create() revel.Result {
 		panic(err)
 	}
 
-	return c.App.RenderJson(&Response{OK, book})
+	return c.Response(&Response{OK, book})
+}
+
+func (c *ApiBook) Show(id string) revel.Result {
+	return nil
+}
+
+
+func (c *ApiBook) List() revel.Result {
+	return nil
 }
