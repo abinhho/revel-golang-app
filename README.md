@@ -1,7 +1,21 @@
-# Welcome to Revel
+## 1. Run docker container
 
-A high-productivity web framework for the [Go language](http://www.golang.org/).
+    docker-compose up --build --force-recreate
 
+## 2. View Docker status
+
+    docker container ls -a
+
+## 3. SSH to docker
+
+    docker exec -it core_app_1 /bin/bash
+    # run some script
+    python --version
+
+    cd /src
+    python ./face_dataset.py
+    python ./face_training.py
+    python ./face_recognition.py
 
 ### Start the web server:
 
@@ -11,25 +25,3 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
     revel run revel-golang-app
 
 ### Go to http://localhost:9000
-
-## Code Layout
-
-The directory structure of a generated Revel application:
-
-    conf/             Configuration directory
-        app.conf      Main app configuration file
-        routes        Routes definition file
-
-    app/              App sources
-        init.go       Interceptor registration
-        controllers/  App controllers go here
-        views/        Templates directory
-
-    messages/         Message files
-
-    public/           Public static assets
-        css/          CSS files
-        js/           Javascript files
-        images/       Image files
-
-    tests/            Test suites
