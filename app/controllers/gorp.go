@@ -9,6 +9,7 @@ import (
 	r "github.com/revel/revel"
 	"log"
 	"os"
+	"fmt"
 )
 
 var (
@@ -18,10 +19,16 @@ var (
 
 func InitDB() {
 	db.Init()
+	fmt.Println("Connect DB...");
+	// db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/gotest")
+	// if err != nil {
+	// 	panic(err)
+	// }
+
 	Dbm = &gorp.DbMap{Db: db.Db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
 	Dbm.TraceOn("[gorp]", log.New(os.Stdout, "myapp:", log.Lmicroseconds))
 
-	Dbm.AddTableWithName(models.Book{}, "book").SetKeys(true, "ID")
+	// Dbm.AddTableWithName(models.Book{}, "book").SetKeys(true, "ID")
 }
 
 type GorpController struct {
@@ -49,7 +56,7 @@ func (c *GorpController) Commit() r.Result {
 	return nil
 }
 
-func (c *GorpController) Rollback1() r.Result {
+func (c *GorpController) Rollback() r.Result {
 	if Txn == nil {
 		return nil
 	}
@@ -58,4 +65,14 @@ func (c *GorpController) Rollback1() r.Result {
 	}
 	Txn = nil
 	return nil
+}
+
+func (c *GorpController) CreateTable() r.Result {
+	if Dbm == nil {
+		return nil
+	}
+	Dbm.AddTableWithName(models.Book{}, "books").SetKeys(true, "Id")
+	Dbm.CreateTables()
+    fmt.Println("\n\nEnd AddTableWithName\n\n");
+    return nil
 }

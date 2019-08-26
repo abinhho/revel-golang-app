@@ -6,11 +6,10 @@ import (
 )
 
 type Book struct {
-	ID int `json: "id"`
-	BookName string `json:bookname`
-	BookCatId int `json:bookcatid`
-	Created int64 `json:-`
-	Updated int64 `json:-`
+	Id       int64                        `id`
+	BookName string                       `bookname`
+    Created  int64                        `created`
+    Updated  int64                        `modified`
 }
 
 func (book *Book) Validate() error {

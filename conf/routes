@@ -25,6 +25,6 @@ GET     /public/*filepath                       Static.Serve("public")
 # without having to add them to the routes table.
 # *       /:controller/:action                    :controller.:action
 
-GET     /api/book:id                            ApiBook.Show
+GET     /api/book/:id                           ApiBook.Show
 GET     /api/book                               ApiBook.List
 POST    /api/book                               ApiBook.Create

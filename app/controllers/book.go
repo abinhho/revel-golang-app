@@ -48,7 +48,17 @@ func (c *ApiBook) Create() revel.Result {
 }
 
 func (c *ApiBook) Show(id string) revel.Result {
-	return nil
+	fmt.Println(id)
+	obj, err := c.Txn.Get(&models.Book{}, id)
+
+	if err != nil {
+		panic(err)
+	}
+
+	book := obj.(*models.Book)
+
+	return c.Response(&Response{OK, book})
+	// return c.Render(book)
 }
 
 
