@@ -13,23 +13,27 @@ services:
     env_file:
       - docker/app/.env
     # Link to containers in another service
-    links:
-      - mysql
+    # links:
+      # - mysql
     # sync workspace folder with /go
     volumes:
-     - .:/go
-  mysql:
-    build:
-      context: .
-      dockerfile: docker/mysql/Dockerfile
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: gotest
-    # sync folders. MySQL data is stored outside container so that rebuilding doesn't clear db.
-    # folder is at workspace root.
-    volumes:
-      - ./_local_mysql_data:/var/lib/mysql
+     - .:/go/revel-golang-app
+    tty: true
+  # mysql:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/mysql/Dockerfile
+  #   command: --init-file /data/application/init.sql
+  #   volumes:
+  #       - docker/mysql/init.sql:/data/application/init.sql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: gotest
+  #   # sync folders. MySQL data is stored outside container so that rebuilding doesn't clear db.
+  #   # folder is at workspace root.
+  #   volumes:
+  #     - ./_local_mysql_data:/var/lib/mysql

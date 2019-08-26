@@ -1,6 +1,6 @@
 FROM mysql:5.7
 
-MAINTAINER Guillermo de la Puente <g.puente.allott@gmail.com>
+MAINTAINER Abinhho <abinh.ho@gmail.com>
 
 VOLUME ["/var/lib/mysql"]
 

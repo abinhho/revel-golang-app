@@ -17,8 +17,12 @@ RUN go get github.com/revel/revel
 RUN go get github.com/revel/cmd/revel
 
 # Copy the entrypoint file
-ADD /docker/web/infinite_loop.sh /infinite_loop.sh
+ADD /docker/app/infinite_loop.sh /infinite_loop.sh
 RUN chmod +x /infinite_loop.sh
 
 # Start process
-ENTRYPOINT ["/infinite_loop.sh"]
+# ENTRYPOINT ["/infinite_loop.sh"]
+
+RUN ls /go/src
+
+RUN revel run revel-golang-app
