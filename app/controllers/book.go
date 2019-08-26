@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"github.com/revel/revel"
 	"fmt"
+	"strings"
 )
 
 type ApiBook struct {
@@ -29,17 +30,23 @@ func BindJsonParams(i io.Reader, s interface{}) error {
 }
 
 
-func (c *ApiBook) Create() revel.Result {
-	book := &models.Book{}
-	fmt.Println(c)
-	// c.BindParams(book)
-
-	var hasError = book.Validate()
-	if hasError != nil {
-		return c.Response(&ErrorResponse{ERR_VALIDATE, c.ErrorMessage(ERR_VALIDATE)})
+func (c *ApiBook) Create(bookName string) revel.Result {
+	book := &models.Book{BookName: bookName}
+	
+	v := c.ApiController.Validation
+	book.Validate(v)
+	var errors []string
+	for _, e := range v.Errors {
+		errors = append(errors, strings.TrimSuffix(e.Message, "\n"))
 	}
 
-	err := c.Txn.Insert(book)
+	fmt.Println(strings.Join(errors, ","))
+	if v.HasErrors() {
+		// return c.Response(&ErrorResponse{ERR_VALIDATE, c.ErrorMessage(ERR_VALIDATE)})
+		return c.Response(&ErrorResponse{ERR_VALIDATE, strings.Join(errors, ", ")})
+	}
+
+	err := Txn.Insert(book)
 	if err != nil {
 		panic(err)
 	}
@@ -47,18 +54,18 @@ func (c *ApiBook) Create() revel.Result {
 	return c.Response(&Response{OK, book})
 }
 
-func (c *ApiBook) Show(id string) revel.Result {
+func (c *ApiBook) Show(id int64) revel.Result {
 	fmt.Println(id)
-	obj, err := c.Txn.Get(&models.Book{}, id)
+	var book models.Book
 
+	bookData, err := Dbm.Get(book, id)
 	if err != nil {
 		panic(err)
 	}
 
-	book := obj.(*models.Book)
+	// bookData := obj.(*models.Book)
 
-	return c.Response(&Response{OK, book})
-	// return c.Render(book)
+	return c.Response(&Response{OK, bookData})
 }
 
 

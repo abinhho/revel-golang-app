@@ -1,8 +1,8 @@
 package models
 
 import (
-	"errors"
 	"github.com/revel/revel"
+	"fmt"
 )
 
 type Book struct {
@@ -12,19 +12,23 @@ type Book struct {
     Updated  int64                        `modified`
 }
 
-func (book *Book) Validate() error {
-	var v revel.Validation
+func (book *Book) Validate(v *revel.Validation) {
+	fmt.Println(book)
+	v.Required(book.BookName)
+	v.MaxSize(book.BookName, 255).MessageKey("BookName min length is 255")
+	v.MinSize(book.BookName, 4)
 
-	v.Check(
-		book.BookName,
-		revel.Required{},
-		revel.MinSize{4},
-		revel.MaxSize{255},
-	)
+	// return v
+	// v.Check(
+	// 	book.BookName,
+	// 	revel.Required{},
+	// 	revel.MinSize{4},
+	// 	revel.MaxSize{255},
+	// )
 
-	if v.HasErrors() {
-		return errors.New("Book name is not valid")
-	}
+	// if v.HasErrors() {
+	// 	return errors.New("Book name is not valid")
+	// }
 
-	return nil
+	// return nil
 }

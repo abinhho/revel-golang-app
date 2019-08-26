@@ -34,6 +34,7 @@ func InitDB() {
 type GorpController struct {
 	*r.Controller
 	Txn *gorp.Transaction
+	Dbm *gorp.DbMap
 }
 
 func (c *GorpController) Begin() r.Result {
