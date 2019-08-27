@@ -19,8 +19,8 @@ RUN go get github.com/revel/cmd/revel
 RUN go get github.com/go-gorp/gorp
 
 # Copy the entrypoint file
-ADD /docker/app/infinite_loop.sh /infinite_loop.sh
-RUN chmod +x /infinite_loop.sh
+# ADD /docker/app/infinite_loop.sh /infinite_loop.sh
+# RUN chmod +x /infinite_loop.sh
 
 # Start process
 # ENTRYPOINT ["/infinite_loop.sh"]
