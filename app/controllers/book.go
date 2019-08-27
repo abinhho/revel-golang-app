@@ -9,6 +9,7 @@ import (
 	"github.com/revel/revel"
 	"fmt"
 	"strings"
+	"time"
 )
 
 type ApiBook struct {
@@ -31,8 +32,12 @@ func BindJsonParams(i io.Reader, s interface{}) error {
 
 
 func (c *ApiBook) Create(bookName string) revel.Result {
-	book := &models.Book{BookName: bookName}
-	
+	book := &models.Book{
+		BookName: bookName,
+		Updated: time.Now().Unix(),
+		Created: time.Now().Unix(),
+	}
+
 	v := c.ApiController.Validation
 	book.Validate(v)
 	var errors []string
@@ -55,7 +60,6 @@ func (c *ApiBook) Create(bookName string) revel.Result {
 }
 
 func (c *ApiBook) Show(id int64) revel.Result {
-	fmt.Println(id)
 	var book models.Book
 
 	bookData, err := Dbm.Get(book, id)
@@ -63,12 +67,22 @@ func (c *ApiBook) Show(id int64) revel.Result {
 		panic(err)
 	}
 
-	// bookData := obj.(*models.Book)
-
 	return c.Response(&Response{OK, bookData})
 }
 
-
 func (c *ApiBook) List() revel.Result {
-	return nil
+	var books []models.Book
+
+	_, err := Dbm.Select(&books, "SELECT * FROM books LIMIT 0, 50")
+	if err != nil {
+		panic(err)
+	}
+
+	if len(books) == 0 {
+		return c.Response(&ErrorResponse{ERR_VALIDATE, c.ErrorMessage(WARN_NOT_FOUND)})
+	}
+
+	fmt.Println(books)
+
+	return c.Response(&Response{OK, books})
 }

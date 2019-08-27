@@ -6,6 +6,7 @@ MAINTAINER Guillermo de la Puente <g.puente.allott@gmail.com>
 EXPOSE 8080 80 443
 
 # Set pwd to the go folder
+RUN export GOPATH=/go
 WORKDIR ${GOPATH}
 
 RUN apt-get update -y && \

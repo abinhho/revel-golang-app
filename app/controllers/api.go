@@ -29,7 +29,9 @@ func (c *ApiController) ErrorMessage(s int) string {
 
 	switch s {
 		case ERR_VALIDATE:
-			return "Error Validate"
+			return "Error Validate."
+		case WARN_NOT_FOUND:
+			return "Data not found."
 		default:
 			return ""
 	}
