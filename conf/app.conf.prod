@@ -120,6 +120,90 @@ i18n.default_language = en
 #  `Static.ServeModule("modulename","public")`
 module.static = github.com/revel/modules/static
 
+################################################################################
+
+# Section: dev-docker
+# This section is evaluated when running Revel in dev mode. Like so:
+#   `revel run path/to/myapp`
+[dev-docker]
+
+# This sets `revel.DevMode` for use in-app.
+# Example:
+#   `if revel.DevMode {...}`
+#   or in your templates with
+#   ``
+# Values:
+# "true"
+#   Sets `DevMode` to `true`.
+# "false"
+#   Sets `DevMode` to `false`.
+mode.dev = true
+
+db.import = github.com/go-sql-driver/mysql
+db.driver = mysql
+db.spec = root:root@tcp(localhost:3306)/gotest
+
+# Pretty print JSON/XML when calling RenderJSON/RenderXML
+# Values:
+# "true"
+#   Enables pretty printing.
+# "false"
+#   Disables pretty printing.
+results.pretty = true
+
+
+# Watch your applicaton files for changes and automatically rebuild
+# Values:
+# "true"
+#   Enables auto rebuilding.
+# "false"
+#   Disables auto rebuilding.
+watch = true
+
+
+# Define when to rebuild new changes.
+# Values:
+# "normal"
+#   Rebuild when a new request is received and changes have been detected.
+# "eager"
+#   Rebuild as soon as changes are detected.
+watch.mode = eager
+
+# Watch the entire `$GOPATH` for changes.
+# Values:
+# "true"
+#   Includes `$GOPATH` in watch path.
+# "false"
+#   Excludes `$GOPATH` from watch path. Default value.
+#watch.gopath = true
+
+
+# Module to run code tests in the browser
+# See:
+#   http://revel.github.io/manual/testing.html
+module.testrunner = github.com/revel/modules/testrunner
+
+
+# Where to log the various Revel logs
+# Values:
+# "off"
+#   Disable log output.
+# "stdout"
+#   Log to OS's standard output.
+# "stderr"
+#   Log to Os's standard error output. Default value.
+# "relative/path/to/log"
+#   Log to file.
+log.all.filter.module.app = stdout    # Log all loggers for the application to the stdout
+log.error.nfilter.module.app = stderr # Everything else that logs an error to stderr
+log.crit.output = stderr              # Everything that logs something as critical goes to this
+log.info.output = stderr
+
+# Revel request access log
+# Access log line format:
+# INFO  21:53:55 static server-engine.go:169: Request Stats                             ip=127.0.0.1 path=/public/vendors/datatables.net-buttons/js/buttons.html5.min.js method=GET start=2017/08/31 21:53:55 status=200 duration_seconds=0.0002583 section=requestlog
+log.request.output = stdout
+
 
 
 ################################################################################

@@ -1,39 +1,57 @@
-version: '2'
+version: '3'
 services:
   app:
     build:
       context: .
       dockerfile: docker/app/Dockerfile
+    container_name: revel-golang-app
     # ports from container exposed to the docker machine and the guest machine
     ports:
       # 80 on the host, 8080 on the guest. Websever listens on 8080
-      - "80:9000" # http
-      - "443:443" # https
+      - "9000:9000" # http
+      # - "443:443" # https
     # file with environment declarations for the container
     env_file:
       - docker/app/.env
     # Link to containers in another service
     # links:
-      # - mysql
+    #   - mysql
+    depends_on:
+      - mysql
     # sync workspace folder with /go
     volumes:
-     - .:/go/revel-golang-app
+     - .:/go/src/revel-golang-app
+    command: >
+      sh -c "ls /go/src &&
+        cp /go/src/revel-golang-app/conf/app.conf.dev-docker /go/src/revel-golang-app/conf/app.conf &&
+        revel run revel-golang-app dev-docker"
     tty: true
-  # mysql:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/mysql/Dockerfile
-  #   command: --init-file /data/application/init.sql
-  #   volumes:
-  #       - docker/mysql/init.sql:/data/application/init.sql
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_USER: root
-  #     MYSQL_PASSWORD: root
-  #     MYSQL_ROOT_PASSWORD: root
-  #     MYSQL_DATABASE: gotest
-  #   # sync folders. MySQL data is stored outside container so that rebuilding doesn't clear db.
-  #   # folder is at workspace root.
-  #   volumes:
-  #     - ./_local_mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  mysql:
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    command: --init-file /data/application/init.sql
+    restart: unless-stopped
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gotest
+    # sync folders. MySQL data is stored outside container so that rebuilding doesn't clear db.
+    # folder is at workspace root.
+    volumes:
+      - ./docker/mysql/init.sql:/data/application/init.sql
+      - ./_local_mysql_data:/var/lib/mysql
+    tty: true
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
